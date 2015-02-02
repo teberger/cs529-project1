@@ -18,3 +18,36 @@ class DnaRegion:
         else:
             return self.sequence[start:stop]
 
+    def __str__(self):
+        return self.sequence
+
+    def __repr__(self):
+        return str(self)
+
+
+class Instance:
+    def __init__(self, attributes, clazz):
+        self.attributes = attributes
+        self.clazz = clazz
+
+    def __str__(self):
+        return '(' + str(self.attributes) + ', ' + str(self.clazz) + ')'
+
+    def __repr__(self):
+        return str(self)
+
+    def __getitem__(self, v):
+        return self.attributes[v]
+
+def build_accessor_function(index):
+    return lambda x: x[index]
+
+def build_from_string(string):
+    [s1, c] = string.split(' ')
+
+    if c == '+':
+        c = True
+    else:
+        c = False
+
+    return Instance(s1, c)
