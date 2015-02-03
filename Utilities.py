@@ -63,6 +63,29 @@ def chi_squared():
     pass
 
 
+def argmin(arg_iter, func):
+    arg_val = None
+    ret = None
+
+    for arg in arg_iter:
+        v_1 = func(arg)
+        if (arg_val == None or v_1 < arg_val):
+            arg_val = v_1
+            ret = arg
+
+    return ret
+
+def argmax(arg_iter, func):
+    arg_val = None
+    ret = None
+    for arg in arg_iter:
+        v_1 = func(arg)
+        if (arg_val == None or v_1 > arg_val):
+            arg_val = v_1
+            ret = arg
+
+    return ret
+
 if __name__ == '__main__':
     data = [(1,True), (2,False), (2,False), (2,False), (1,True), (2,True)]
     classes = [True, False]

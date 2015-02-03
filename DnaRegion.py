@@ -1,6 +1,8 @@
 __author__ = 'Taylor'
 
 class DnaRegion:
+    """
+    """
     def __init__(self, sequence):
         self.sequence = sequence
 
@@ -26,7 +28,11 @@ class DnaRegion:
 
 
 class Instance:
+    """
+    """
     def __init__(self, attributes, clazz):
+        """
+        """
         self.attributes = attributes
         self.clazz = clazz
 
@@ -39,10 +45,18 @@ class Instance:
     def __getitem__(self, v):
         return self.attributes[v]
 
-def build_accessor_function(index):
+
+
+def accessor_f(index):
+    """
+    """
     return lambda x: x[index]
 
-def build_from_string(string):
+
+
+def read_instance(string):
+    """
+    """
     [s1, c] = string.split(' ')
 
     if c == '+':
