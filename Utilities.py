@@ -1,6 +1,7 @@
 __author__ = 'Taylor'
 
 from numpy import log2
+from DnaRegion import accessor_f
 
 def entropy(instance_list, classes):
     """
@@ -15,7 +16,7 @@ def entropy(instance_list, classes):
     :return: the calculated entropy of the instance_list
     """
     
-    separated  = filter(lambda x : x != 0, [len([(x,y) for (x,y) in instance_list if y == c]) for c in classes])
+    separated  = filter(lambda x : x != 0, [len([i for i in instance_list if i.clazz == c]) for c in classes])
 
     n = float(len(instance_list))
 
@@ -24,7 +25,7 @@ def entropy(instance_list, classes):
 
     return entropy
 
-def information_gain(instance_list, accessor_function, attribute_classes, classes):
+def information_gain(index, instance_list, attribute_classes, classes):
     """
     Calculates the information gain for the data using the attribute accessor
     function as the splitting function which maps the instances which result
@@ -46,8 +47,8 @@ def information_gain(instance_list, accessor_function, attribute_classes, classe
     """
     entropy_current = entropy(instance_list, classes)
 
-    separated = separate_by_attribute(instance_list, accessor_function, attribute_classes)
-    
+    separated = separate_by_attribute(instance_list, index, attribute_classes).values()
+
     n = float(len(instance_list))
     info_gain = entropy_current + reduce(lambda x, y: \
                                            x - (len(y)/n * entropy(y, classes)),
@@ -55,13 +56,15 @@ def information_gain(instance_list, accessor_function, attribute_classes, classe
     
     return info_gain
 
-def separate_by_attribute(instance_list, accessor_function, attribute_classes):
-    return [[(x,y) for (x,y) in instance_list if accessor_function(x) == a] for a in attribute_classes]
+def separate_by_attribute(instance_list, index, attribute_classes):
+    return  {a:[x for x in instance_list if x.attributes[index] == a] for a in attribute_classes}
 
 
 def chi_squared():
     pass
 
+def purity():
+    pass
 
 def argmin(arg_iter, func):
     arg_val = None

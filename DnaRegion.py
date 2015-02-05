@@ -42,15 +42,10 @@ class Instance:
     def __repr__(self):
         return str(self)
 
-    def __getitem__(self, v):
-        return self.attributes[v]
-
-
-
 def accessor_f(index):
     """
     """
-    return lambda x: x[index]
+    return lambda x: x.attributes[index]
 
 
 

@@ -1,12 +1,13 @@
 __author__ = 'Taylor'
 
 class DecisionTree:
-    def __init__(self, f, children):
+    def __init__(self, id, f, children):
         """
         :param f:
         :param children:
         :return:
         """
+        self.id = id
         self.f = f
         self.children = children
 
@@ -16,11 +17,10 @@ class DecisionTree:
         :param instance:
         :return:
         """
-        pass
+        return self.f(instance).classify(instance)
 
 class DecisionLeaf(DecisionTree):
     def __init__(self, clazz):
-        super(DecisionLeaf, self).__init__(self, None, [])
         """
 
         :param clazz:
@@ -30,12 +30,3 @@ class DecisionLeaf(DecisionTree):
 
     def classify(self, instance):
         return self.clazz
-
-class DnaRegion:
-    def __init__(self, nucleotides):
-        """
-
-        :param nucleotides:
-        :return:
-        """
-        self.nucleotides = nucleotides
