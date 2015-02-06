@@ -2,7 +2,7 @@ __author__ = 'Taylor'
 
 from sys import argv
 from DnaRegion import *
-from Utilities import information_gain, argmax, purity, separate_by_attribute
+from Utilities import information_gain, argmax, separate_by_attribute, misclassification_rate, argmin
 from functools import partial
 from Tree import *
 
@@ -33,6 +33,15 @@ def get_max_gain_index(data):
                            classes = m_classes)
                         
     return argmax(range(len(data[0].attributes)), info_partial)
+
+def get_misclass_index(data):
+    mis_partial = partial(misclassification_rate,
+                          instance_list = data,
+                          attribute_classes = m_bases,
+                          classes = m_classes)
+
+    return argmin(range(len(data[0].attributes)), mis_partial)
+    
 
 def build_tree(graph, split_proc, end_proc, data, parent_id):
     if (end_proc(data)):
@@ -69,18 +78,13 @@ def build_tree(graph, split_proc, end_proc, data, parent_id):
     node = DecisionTree(this_id, f, children)
     return node
 
-
-def classify(graph, root, instance):
-    pass
-    
-
 if __name__ == '__main__':
     print "Starting decision tree learning..."
     print "Training data: ", argv[3]
     print "Testing data : ", argv[4]
     
     if argv[1] == '-p':
-        procedure = get_max_gain_index
+        procedure = get_misclass_index
     elif argv[1] == '-i':
         procedure = get_max_gain_index
     else:
@@ -106,7 +110,3 @@ if __name__ == '__main__':
             score += 1
 
     print (score / total)
-            
-        
-
-

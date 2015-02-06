@@ -25,6 +25,33 @@ def entropy(instance_list, classes):
 
     return entropy
 
+def misclassification(instance_list, classes):
+    class_counts = counts(instance_list, classes)
+    n = float(len(instance_list))
+    return max(map(lambda x : x / n, class_counts.values()))
+
+def misclassification_rate(index, instance_list, attribute_classes, classes):
+    mis_current = misclassification(instance_list, classes)
+    
+    split_data = separate_by_attribute(instance_list, index, attribute_classes)
+    
+    errors = []
+    for d_prime in split_data.values():
+        if len(d_prime) == 0:
+            continue
+
+        d_len = float(len(d_prime))
+        errors.append( d_len / len(instance_list) * misclassification(d_prime, classes))
+    
+    return mis_current - sum(errors)
+
+def counts(instance_list, classes):
+    count = {}
+    for c in classes:
+        count[c] = len(filter(lambda x : x.clazz == c, instance_list))
+    return count
+        
+
 def information_gain(index, instance_list, attribute_classes, classes):
     """
     Calculates the information gain for the data using the attribute accessor
@@ -59,24 +86,8 @@ def information_gain(index, instance_list, attribute_classes, classes):
 def separate_by_attribute(instance_list, index, attribute_classes):
     return  {a:[x for x in instance_list if x.attributes[index] == a] for a in attribute_classes}
 
-
-def chi_squared():
+def chi_squared(data):
     pass
-
-def purity():
-    pass
-
-def argmin(arg_iter, func):
-    arg_val = None
-    ret = None
-
-    for arg in arg_iter:
-        v_1 = func(arg)
-        if (arg_val == None or v_1 < arg_val):
-            arg_val = v_1
-            ret = arg
-
-    return ret
 
 def argmax(arg_iter, func):
     arg_val = None
@@ -89,8 +100,13 @@ def argmax(arg_iter, func):
 
     return ret
 
-if __name__ == '__main__':
-    data = [(1,True), (2,False), (2,False), (2,False), (1,True), (2,True)]
-    classes = [True, False]
-    print "Entropy: ", entropy(data, classes)
-    print "Info Gain: ", information_gain(data, lambda x : x, [1,2], classes)
+def argmin(arg_iter, func):
+    arg_val = None
+    ret = None
+    for arg in arg_iter:
+        v_1 = func(arg)
+        if (arg_val == None or v_1 < arg_val):
+            arg_val = v_1
+            ret = arg
+
+    return ret
