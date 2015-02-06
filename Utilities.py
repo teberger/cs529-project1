@@ -86,8 +86,38 @@ def information_gain(index, instance_list, attribute_classes, classes):
 def separate_by_attribute(instance_list, index, attribute_classes):
     return  {a:[x for x in instance_list if x.attributes[index] == a] for a in attribute_classes}
 
-def chi_squared(data):
-    pass
+def chi_squared(separated_data, classes):
+    table = {}
+    total_columns = {}
+    total_row = {}
+    total = 0
+    for key in separated_data.keys():
+        table[key] = {}
+        total_row[key] = 0
+
+        for c in classes:
+            table[key][c] = len([x for x in separated_data[key] if x.clazz == c])
+            total_row[key] += table[key][c]
+            total += table[key][c]
+
+            if c in total_columns:
+                total_columns[c] += table[key][c]
+            else:
+                total_columns[c] = table[key][c]
+
+    expected = lambda attribute, c : total_row[attribute] / float(total) * total_columns[c]
+
+    chi = 0
+    for att in separated_data.keys():
+        for c in classes:
+            e = expected(att, c)
+            if e == 0:
+                return 0.0
+
+            chi += ((table[att][c] - e) ** 2) / e
+
+    return chi
+    
 
 def argmax(arg_iter, func):
     arg_val = None
